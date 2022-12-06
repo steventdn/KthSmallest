@@ -121,9 +121,24 @@ public class KthSmallest {
     }
   
     public static int medianOfMedians(int[] list, int k){
-
+        //if size == 5 or less
         if(list.length <= 5){
-
+            //find median of subset
+             return recursiveQuick(list, 0, list.length - 1, list.length / 2);
+        } else {
+            //if its > 5 (partition into subarrays of five and find median of each)
+            int numOfArr = list.length/5;
+            //mm array
+            int[] mmArr = new int[numOfArr];
+            //loop for number of subsets
+            for(int i = 0; i<numOfArr; i++){
+                int index = i * 5;                      //place in OG array
+                int[] subset = new int[5];              //new subset
+                for(int j = index; j<index + 5; j++){   //start from 
+                    subset[j] = list[index];
+                }
+                mmArr[i-1] = medianOfMedians(subset, subset.length / 2);
+            }
         }
     }
 
