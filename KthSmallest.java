@@ -58,7 +58,8 @@ public class KthSmallest {
 
     //ALGO 1 (SORT THE LIST (mergeSort) AND THEN RETURN KTH SMALLEST)
     public static int algoOne(int[] list, int k){
-        return list[k];
+        mergeSort(list);
+        return list[k-1];
     }
 
 
@@ -119,80 +120,72 @@ public class KthSmallest {
         list[swap1] = list[swap2];
         list[swap2] = temp;
     }
-  
-    public static int medianOfMedians(int[] list, int k){
-        //if size == 5 or less
-        if(list.length <= 5){
-            //find median of subset
-             return recursiveQuick(list, 0, list.length - 1, list.length / 2);
+
+     public static int medianOfMedians(int[] list, int low, int high){
+        //if size <= 5 or 
+        if(high <= 5){
+            //find median 
+             mergeSort(list);
+             return list[2];
         } else {
             //if its > 5 (partition into subarrays of five and find median of each)
             int numOfArr = list.length/5;
+           
             //mm array
             int[] mmArr = new int[numOfArr];
             //loop for number of subsets
             for(int i = 0; i<numOfArr; i++){
-                int index = i * 5;                      //place in OG array
-                int[] subset = new int[5];              //new subset
-                for(int j = index; j<index + 5; j++){   //start from 
-                    subset[j] = list[index];
-                }
-                mmArr[i-1] = medianOfMedians(subset, subset.length / 2);
+                int[] subset = new int[5];          //new subset
+               
+                System.arraycopy(list, i * 5, subset, 0, 5);
+                //for each subset find the median and add to the mmArr
+                mmArr[i] = medianOfMedians(subset, 0, subset.length - 1);
             }
+            //lastly find the median of mmArr
+            mergeSort(mmArr);
+            return mmArr[mmArr.length/2];
         }
     }
-
-    /*
-     *  public static void recursiveQuickSort(int[] list, int low, int high){
-
-        //Base Case (one element in the array)
-        if(low >= high){
-            return;
-        }
-        //chose the end num as pivot
-        int pivot = list[high];
-
-        int left_pointer = low;
-        int right_pointer = high;
-
-        while(left_pointer < right_pointer){
-            //while the element on the left is less|equal to the pivot and still in bounds
-            while(list[left_pointer] <= pivot & left_pointer < right_pointer){
-                //increment left_pointer (check next)
-                left_pointer++;
+  
+    public static int mmPartition(int[] list, int low, int high, int mM){       
+        int pivot = list[mM];
+        //int swapper = (low - 1);
+        int swapper = low;
+        for (int i = low; i <= high - 1; i++)
+        {
+            //do not compare pivot with itself
+            if(i == mM){
+                i++;
             }
-            //while the element on the left is greater|equal to the pivot and still in bounds
-            while(list[right_pointer] >= pivot & left_pointer < right_pointer){
-                //increment right_pointer (check next)
-                right_pointer--;
+            if (list[i] <= pivot)
+            {   
+                //swapper++;
+                swap(list, swapper, i);
+                swapper++;
             }
-            //after these while loops (list[left_pointer] > pivot) && (list[right_pointer] < pivot)
-            swap(list, left_pointer, right_pointer);
         }
-        //pointers have met at the middle (==) (swap left with the pivot int)
-        swap(list, left_pointer, high);
-        //start from 0 (start) high -> pivot pos - 1;
-        recursiveQuickSort(list, low, left_pointer - 1);
-        //start from pivot + 1 -> (end)high
-        recursiveQuickSort(list, left_pointer + 1, high);
+            //swapper++;
+            swap(list, mM, swapper);
+                
+        return swapper;
     }
     
+    public static int mmQuick(int[] list, int low, int high, int k){
+        //get MM
+        int pivot = medianOfMedians(list, 0, list.length - 1);
 
-     */
-
-    /*
-    //Quick Sort (partition until pivot is at the kth slot)
-    //Best Case O(n) Worst Case O(n^2)
-    public int secondAlgorithm(int k, ArrayList<Integer> list){
-
+        //partition array with mM;
+        int partition = mmPartition(list, low, high, pivot);
+        //use MM to partition
+        //int partition = mmPartition(list, low, high, pivot);
+        if (partition == k){
+            return list[partition];
+        //if the current pivot index < kth - 1) (0-indexed) CHECK RIGHT SIDE OF PIVOT
+        } else if (pivot > k) {
+             return mmQuick(list, low, pivot - 1, k);
+        //if the current pivot index > kth - 1) (0-indexed) CHECK LEFT SIDE OF PIVOT
+        } else {
+            return mmQuick(list, pivot + 1, high, k);
+        }
     }
-    //Recursive Quicksort
-    public int thirdAlgorithm(int k, ArrayList<Integer> list){
-
-    }
-    //Median of Medians
-    public int fourthAlgorithm(int k, ArrayList<Integer> list){
-
-    }
-    */
 }
