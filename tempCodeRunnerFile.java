@@ -1,4 +1,4 @@
- // System.out.println("Median Quick");
+System.out.println("Median Quick");
             // System.out.println("Size" + nSize);
             // System.out.println("The Kth (k = 1)" + KthSmallest.mmQuick(list, 0, list.length - 1, 1));
             // System.out.println("The Kth (k = n/4)" + KthSmallest.mmQuick(list, 0, list.length - 1, list.length / 4));

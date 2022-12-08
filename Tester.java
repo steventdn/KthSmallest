@@ -7,7 +7,8 @@ class Tester{
                     //  21,22,23,24,25,26,27,28,29,30,
                     //  31,32,33,34,35,36,37,38,39,40,
                     // 41,42,43,44,45,46,47,48,49,50};
-        int[] nSizes = {5, 10, 50, 100, 500, 1000};
+        //int[] nSizes = {5, 10, 50, 100, 500, 1000};
+        int[] nSizes = {5, 10};
         for(int nSize: nSizes){
             int[] list = new int[nSize]; 
             int start = 1;
@@ -39,15 +40,7 @@ class Tester{
             System.out.println("The Kth (k = 3n/4)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, (3*list.length) / 4 ));
             System.out.println("The Kth (k = n)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, list.length ));
 
-            System.out.println("Median Quick");
-            System.out.println("Size" + nSize);
-            System.out.println("The Kth (k = 1)" + KthSmallest.mmQuick(list, 0, list.length - 1, 1));
-            System.out.println("The Kth (k = n/4)" + KthSmallest.mmQuick(list, 0, list.length - 1, list.length / 4));
-            System.out.println("The Kth (k = n/2)" + KthSmallest.mmQuick(list, 0, list.length - 1, list.length / 2));
-            System.out.println("The Kth (k = 3n/4)" + KthSmallest.mmQuick(list, 0, list.length - 1, (3*list.length) / 4 ));
-            System.out.println("The Kth (k = n)" + KthSmallest.mmQuick(list, 0, list.length - 1, list.length ));
-
-
+            System.out.println("Array" + KthSmallest.mmQuick(list, 0, list.length - 1, 1));
             System.out.println(KthSmallest.medianOfMedians(list, 0, list.length - 1));
         } 
     }

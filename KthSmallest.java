@@ -126,7 +126,7 @@ public class KthSmallest {
         if(high <= 5){
             //find median 
              mergeSort(list);
-             return list[2];
+             return list[list.length/2];
         } else {
             //if its > 5 (partition into subarrays of five and find median of each)
             int numOfArr = list.length/5;
@@ -153,21 +153,29 @@ public class KthSmallest {
         int swapper = low;
         for (int i = low; i <= high - 1; i++)
         {
-            //do not compare pivot with itself
-            if(i == mM){
-                i++;
-            }
-            if (list[i] <= pivot)
+            
+            if (list[i] < pivot)
             {   
                 //swapper++;
                 swap(list, swapper, i);
                 swapper++;
-            }
+            } 
         }
             //swapper++;
             swap(list, mM, swapper);
-                
+        for(int i = 0; i<list.length; i++){
+            System.out.println(list[i]);  
+        }
+        System.out.println("Pivot: " + list[swapper]);
         return swapper;
+    }
+    public static int[] getLeftOrRight(int[]list, int low, int high){
+        int[] result = new int[high - low];
+        for(int i = low; i<high; i++){
+            result[i] = list[low];
+        }
+        return result;
+
     }
     
     public static int mmQuick(int[] list, int low, int high, int k){
@@ -176,16 +184,20 @@ public class KthSmallest {
 
         //partition array with mM;
         int partition = mmPartition(list, low, high, pivot);
+        return partition;
         //use MM to partition
         //int partition = mmPartition(list, low, high, pivot);
-        if (partition == k){
-            return list[partition];
-        //if the current pivot index < kth - 1) (0-indexed) CHECK RIGHT SIDE OF PIVOT
-        } else if (pivot > k) {
-             return mmQuick(list, low, pivot - 1, k);
-        //if the current pivot index > kth - 1) (0-indexed) CHECK LEFT SIDE OF PIVOT
-        } else {
-            return mmQuick(list, pivot + 1, high, k);
-        }
+        // if (partition == k){
+        //     return list[partition];
+        // //if the current pivot index < kth - 1) (0-indexed) CHECK RIGHT SIDE OF PIVOT
+        // } else if (pivot < k - 1) {
+        //     int[] leftSide = getLeftOrRight(list, pivot + 1, high); 
+           
+        //     return mmQuick(leftSide, 0, leftSide.length - 1, k);
+        // //if the current pivot index > kth - 1) (0-indexed) CHECK LEFT SIDE OF PIVOT
+        // } else {
+        //     int[] rightSide = getLeftOrRight(list, low, pivot - 1);
+        //     return mmQuick(rightSide, 0, rightSide.length - 1, k);
+        // }
     }
 }
