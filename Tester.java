@@ -3,7 +3,8 @@ class Tester {
   public static void main(String[] args) {
     KthSmallest test = new KthSmallest();
     int[] nSizes = {10, 50, 100, 500, 1000, 5000};
-  
+  //test
+  //new shit
        //For each n size 
     for (int nSize : nSizes) {
       //At each size we reset the Time
@@ -12,7 +13,7 @@ class Tester {
       double select3Avg = 0;
       double select4Avg = 0;
 
-      for(int p = 0; p<1000; p++){
+      for(int p = 0; p<1; p++){
         int[] kValues = {1, nSize/4, nSize/2, 3*nSize/4, nSize};
         int[] arr = test.arrayGen(nSize);
         // int[] arr = new int[nSize];
@@ -21,7 +22,7 @@ class Tester {
         //   arr[i] = start;
         //   start++;
         // }
-        for(int s = 0; s<20; s++){
+        for(int s = 0; s<1; s++){
 
           //For each k Value in nSize
           for(int k: kValues){
@@ -61,6 +62,7 @@ class Tester {
       System.out.println("Select 2 Avg Time:" + select2Avg/20000);
       System.out.println("Select 3 Avg Time:" + select3Avg/20000);
       System.out.println("Select 4 Avg Time:" + select4Avg/20000);
+      System.out.println("hello");
     }
   }
 }
