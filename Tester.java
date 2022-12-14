@@ -1,81 +1,145 @@
-import java.util.Random;
-class Tester{
-    public static void main(String[] args) {
-       //int[] list = {1,2,3,4,5,6,7,8,9,10};
-       //int[] list = {1,2,3,4,5,6,7,8,9,10,
-                    //  11,12,13,14,15,16,17,18,19,20,
-                    //  21,22,23,24,25,26,27,28,29,30,
-                    //  31,32,33,34,35,36,37,38,39,40,
-                    // 41,42,43,44,45,46,47,48,49,50};
-        //int[] nSizes = {5, 10, 50, 100, 500, 1000};
-        int[] nSizes = {5, 10};
-        for(int nSize: nSizes){
-            int[] list = new int[nSize]; 
-            int start = 1;
-            for(int i = 0; i<nSize; i++){
-                list[i] = start;
-                start++;
-            }
-            System.out.println("\n\nMerge");
-            System.out.println("Size" + nSize);
-            System.out.println("The Kth (k = 1)" + KthSmallest.algoOne(list, 1));
-            System.out.println("The Kth (k = n/4)" + KthSmallest.algoOne(list, list.length / 4 ));
-            System.out.println("The Kth (k = n/2)" + KthSmallest.algoOne(list, list.length / 2 ));
-            System.out.println("The Kth (k = 3n/4)" + KthSmallest.algoOne(list, (3*list.length) / 4 ));
-            System.out.println("The Kth (k = n)" + KthSmallest.algoOne(list, list.length));
 
-            System.out.println("Iterative Quick");
-            System.out.println("Size" + nSize);
-            System.out.println("The Kth (k = 1)" + KthSmallest.iterativeQuick(list, 0, list.length - 1, 1));
-            System.out.println("The Kth (k = n/4)" + KthSmallest.iterativeQuick(list, 0, list.length - 1, list.length / 4));
-            System.out.println("The Kth (k = n/2)" + KthSmallest.iterativeQuick(list, 0, list.length - 1, list.length / 2));
-            System.out.println("The Kth (k = 3n/4)" + KthSmallest.iterativeQuick(list, 0, list.length - 1, (3*list.length) / 4 ));
-            System.out.println("The Kth (k = n)" + KthSmallest.iterativeQuick(list, 0, list.length - 1, list.length ));
+class Tester {
+  public static void main(String[] args) {
+    KthSmallest test = new KthSmallest();
+    int[] nSizes = {10, 50, 100, 500, 1000, 5000};
+  
+       //For each n size 
+    for (int nSize : nSizes) {
+      //At each size we reset the Time
+      double select1Avg = 0;
+      double select2Avg = 0;
+      double select3Avg = 0;
+      double select4Avg = 0;
 
-            System.out.println("Recursive Quick");
-            System.out.println("Size" + nSize);
-            System.out.println("The Kth (k = 1)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, 1));
-            System.out.println("The Kth (k = n/4)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, list.length / 4));
-            System.out.println("The Kth (k = n/2)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, list.length / 2));
-            System.out.println("The Kth (k = 3n/4)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, (3*list.length) / 4 ));
-            System.out.println("The Kth (k = n)" + KthSmallest.recursiveQuick(list, 0, list.length - 1, list.length ));
-
-            System.out.println("Array" + KthSmallest.mmQuick(list, 0, list.length - 1, 1));
-            System.out.println(KthSmallest.medianOfMedians(list, 0, list.length - 1));
-        } 
-    }
-}
-      
-/* 
-        for(int i = 0; i<list.length; i++){
-            list[i] = rand.nextInt(10);
-        }
-
-        System.out.println("Before");
-        for(int i = 0; i<list2.length; i++){
-            System.out.println(list2[i]);
-        }
-        */
-        //Merge
-        //KthSmallest.mergeSort(list);
-
-        
-        //System.out.println("Third: " + KthSmallest.mmQuick(list2, 0, list2.length - 1, 7));
-        //Quick (rec)
-        //System.out.println(KthSmallest.recursiveQuick(list, 0, list.length - 1, 3));
-        //KthSmallest.recursiveQuickSort(list, 0, list.length - 1, 0);
-        // System.out.println("After");
-        // for(int i = 0; i<list.length; i++){
-        //     System.out.println(list[i]);
+      for(int p = 0; p<1000; p++){
+        int[] kValues = {1, nSize/4, nSize/2, 3*nSize/4, nSize};
+        int[] arr = test.arrayGen(nSize);
+        // int[] arr = new int[nSize];
+        // int start = 1;
+        // for (int i = 0; i < nSize; i++) {
+        //   arr[i] = start;
+        //   start++;
         // }
+        for(int s = 0; s<20; s++){
 
+          //For each k Value in nSize
+          for(int k: kValues){
+          
+            // Merge
+            long startTime1 = System.nanoTime();
+            test.algoOne(arr, k);
+            long endTime1 = System.nanoTime();
+            long totalTime1 = endTime1 - startTime1;
+            select1Avg += totalTime1;
+      
+            // Iterative
+            long startTime2 = System.nanoTime();
+            test.iterativeQuick(arr, 0, arr.length - 1, k);
+            long endTime2 = System.nanoTime();
+            long totalTime2 = endTime2 - startTime2;
+            select2Avg += totalTime2;
+  
+            // Recursive
+            long startTime3 = System.nanoTime();
+            test.recursiveQuick(arr, 0, arr.length - 1, k);
+            long endTime3 = System.nanoTime();
+            long totalTime3 = endTime3 - startTime3;
+            select3Avg += totalTime3;
+      
+            // Median
+            long startTime4 = System.nanoTime();
+            test.medianOfMedians(arr, 0, arr.length - 1, k);
+            long endTime4 = System.nanoTime();
+            long totalTime4 = endTime4 - startTime4;
+            select4Avg += totalTime4;
+          }
+        }
+      }
+      System.out.println("\n\n Size: " + nSize);
+      System.out.println("Select 1 Avg Time:" + select1Avg/20000);
+      System.out.println("Select 2 Avg Time:" + select2Avg/20000);
+      System.out.println("Select 3 Avg Time:" + select3Avg/20000);
+      System.out.println("Select 4 Avg Time:" + select4Avg/20000);
+    }
+  }
+}
         
-        //System.out.println("Merge");
-        //System.out.println("The smallest is: " + KthSmallest.algoOne(list, 0));
-        //int[] kSizes = {1, size/4, size/2, 3*size/4, size - 1};
-        //for(int kSize: kSizes){
-        //System.out.println("The" + kSize + "smallest is: " + KthSmallest.algoOne(list, kSize));
-        //}
+      
+       
+        
 
-       // 
-
+  //CODE TO VERIFY PROGRAM CORRECTNESS
+     
+      // int[] nSizes = {10, 50, 100, 500, 1000, 5000};
+      // for(int nSize: nSizes){
+      //   int start = 1;
+        
+      //   int[] list = new int[nSize];
+      //   for (int i = 0; i < list.length; i++) {
+      //     list[i] = start;
+      //     start++;
+      //   }
+        
+      //   KthSmallest test = new KthSmallest();
+        
+      //   System.out.println("\n\nMerge");
+      //   System.out.println("Size" + nSize);
+        
+      //   System.out.println("The Kth (k = 1)" + test.algoOne(list, 1));
+       
+      //   System.out.println("The Kth (k = n/4)" + test.algoOne(list,
+      //   list.length / 4));
+       
+      //   System.out.println("The Kth (k = n/2)" + test.algoOne(list,
+      //   list.length / 2));
+        
+      //   System.out.println("The Kth (k = 3n/4)" + test.algoOne(list, (3 *
+      //   list.length) / 4));
+      
+      //   System.out.println("The Kth (k = n)" + test.algoOne(list,
+      //   list.length));
+    
+      //   System.out.println("Iterative Quick");
+      //   System.out.println("Size" + nSize);
+      //   System.out.println("The Kth (k = 1)" + test.iterativeQuick(list, 0,
+      //   list.length - 1, 1));
+      //   System.out.println("The Kth (k = n/4)" + test.iterativeQuick(list, 0,
+      //   list.length - 1, list.length / 4));
+      //   System.out.println("The Kth (k = n/2)" + test.iterativeQuick(list, 0,
+      //   list.length - 1, list.length / 2));
+      //   System.out
+      //   .println("The Kth (k = 3n/4)" + test.iterativeQuick(list, 0,
+      //   list.length - 1, (3 * list.length) / 4));
+      //   System.out.println("The Kth (k = n)" + test.iterativeQuick(list, 0,
+      //   list.length - 1, list.length));
+    
+      //   System.out.println("Recursive Quick");
+      //   System.out.println("Size" + nSize);
+      //   System.out.println("The Kth (k = 1)" + test.recursiveQuick(list, 0,
+      //   list.length - 1, 1));
+      //   System.out.println("The Kth (k = n/4)" + test.recursiveQuick(list, 0,
+      //   list.length - 1, list.length / 4));
+      //   System.out.println("The Kth (k = n/2)" + test.recursiveQuick(list, 0,
+      //   list.length - 1, list.length / 2));
+      //   System.out
+      //   .println("The Kth (k = 3n/4)" + test.recursiveQuick(list, 0,
+      //   list.length - 1, (3 * list.length) / 4));
+      //   System.out.println("The Kth (k = n)" + test.recursiveQuick(list, 0,
+      //   list.length - 1, list.length));
+  
+      //   System.out.println("Median");
+      //   System.out.println("Size" + nSize);
+    
+        
+      //   System.out.println("The Kth (k = 1)" + test.medianOfMedians(list, 0,
+      //   list.length - 1, 1));
+      //   System.out.println("The Kth (k = n/4)" + test.medianOfMedians(list, 0,
+      //   list.length - 1, list.length / 4));
+      //   System.out.println("The Kth (k = n/2)" + test.medianOfMedians(list, 0,
+      //   list.length - 1, list.length / 2));
+      //   System.out
+      //   .println("The Kth (k = 3n/4)" + test.medianOfMedians(list, 0,
+      //   list.length - 1, (3 * list.length) / 4));
+      //   System.out.println("The Kth (k = n)" + test.medianOfMedians(list, 0,
+      //   list.length - 1, list.length));
